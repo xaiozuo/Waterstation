@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.waterstation.waterstation.mapper.TbPointtransactionrecordsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.waterstation.waterstation.entity.TbPointtransactionrecords">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="income_or_expense_type" property="incomeOrExpenseType" />
+        <result column="point_value" property="pointValue" />
+        <result column="point_change_type" property="pointChangeType" />
+        <result column="device_id" property="deviceId" />
+        <result column="outlet" property="outlet" />
+        <result column="advertisement_link" property="advertisementLink" />
+        <result column="transaction_time" property="transactionTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_name,user_id, income_or_expense_type, point_value, point_change_type, device_id, outlet, advertisement_link, transaction_time
+    </sql>
+
+</mapper>

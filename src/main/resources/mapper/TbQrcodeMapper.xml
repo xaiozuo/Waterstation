@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.waterstation.waterstation.mapper.TbQrcodeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.waterstation.waterstation.entity.TbQrcode">
+        <id column="id" property="id" />
+        <result column="saler" property="saler" />
+        <result column="appid" property="appid" />
+        <result column="outlet" property="outlet" />
+        <result column="chaddress" property="chaddress" />
+        <result column="imgname" property="imgname" />
+        <result column="codeaddress" property="codeaddress" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, outlet, chaddress, imgname, codeaddress,saler,appid
+    </sql>
+
+</mapper>

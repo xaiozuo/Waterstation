@@ -23,8 +23,8 @@ public class TbTask implements Serializable {
 
     private Integer id;
 
-    private Integer taskCounts;
+    private Integer taskcounts;
 
-    private LocalDateTime createTime;
+    private LocalDateTime createtime;
 
 }

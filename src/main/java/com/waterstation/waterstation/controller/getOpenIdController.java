@@ -2,7 +2,6 @@ package com.waterstation.waterstation.controller;
 
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
-import com.google.gson.Gson;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

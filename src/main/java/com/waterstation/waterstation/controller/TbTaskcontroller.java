@@ -29,7 +29,6 @@ public class TbTaskcontroller {
 
         return tbTaskService.save(tbTask);
     }
-
     @PostMapping("/mod")
     public boolean mod(@RequestBody TbTask tbTask){
         return tbTaskService.updateById(tbTask);

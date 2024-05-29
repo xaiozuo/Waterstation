@@ -8,11 +8,13 @@
         <result column="rulesname" property="rulesname" />
         <result column="counts" property="counts" />
         <result column="increasepoint" property="increasepoint" />
+        <result column="reduce_point" property="reducePoint" />
+        <result column="exchange_water" property="exchangeWater" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, rulesname, counts, increasepoint
+        id, rulesname, counts, increasepoint,reduce_point,exchange_water
     </sql>
 
 </mapper>

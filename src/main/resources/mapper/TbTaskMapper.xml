@@ -5,13 +5,13 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.waterstation.waterstation.entity.TbTask">
         <id column="id" property="id" />
-        <result column="task_counts" property="taskCounts" />
-        <result column="create_time" property="createTime" />
+        <result column="taskcounts" property="taskcounts" />
+        <result column="createtime" property="createtime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, taskCounts,createTime
+        id, taskcounts,createtime
     </sql>
 
 </mapper>

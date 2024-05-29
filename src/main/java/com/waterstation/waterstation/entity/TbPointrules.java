@@ -26,9 +26,11 @@ public class TbPointrules implements Serializable {
 
     private String rulesname;
 
-    private BigDecimal counts;
+    private Integer counts;
 
-    private BigDecimal increasepoint;
+    private Integer increasepoint;
 
+    private Integer reducePoint;
 
+    private Integer exchangeWater;
 }

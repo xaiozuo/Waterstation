@@ -32,22 +32,6 @@ public class TbPointtransactionrecordsController {
     public List<TbPointtransactionrecords> listByid(@RequestBody Map<String, Object> requestParams){
         return tbPointtransactionrecordsService.listByMap(requestParams);
     }
-
-    @PostMapping("/save")
-    public boolean save(@RequestBody TbPointtransactionrecords tbPointtransactionrecords){
-        return tbPointtransactionrecordsService.save(tbPointtransactionrecords);
-    }
-
-    @PostMapping("/mod")
-    public boolean mod(@RequestBody TbPointtransactionrecords tbPointtransactionrecords){
-        return tbPointtransactionrecordsService.updateById(tbPointtransactionrecords);
-    }
-
-    @PostMapping("/saveOrMod")
-    public boolean saveOrMod(@RequestBody TbPointtransactionrecords tbPointtransactionrecords){
-        return tbPointtransactionrecordsService.saveOrUpdate(tbPointtransactionrecords);
-    }
-
     @GetMapping("/delete")
     public boolean delete(Integer id){
         return tbPointtransactionrecordsService.removeById(id);

@@ -42,6 +42,7 @@ public class TbPointtransactionrecords implements Serializable {
 
     private LocalDateTime transactionTime;
 
+
     public Integer getId() {
         return id;
     }

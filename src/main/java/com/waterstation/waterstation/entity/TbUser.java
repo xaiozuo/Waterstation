@@ -39,6 +39,10 @@ public class TbUser implements Serializable {
 
     private Integer taskCount;
 
+    private Integer role;
+
+    private Integer groupId;
+
     public String getProfilePhoto() {
         return profilePhoto;
     }
@@ -94,4 +98,12 @@ public class TbUser implements Serializable {
     public void setPointbalance(Integer pointbalance) {
         this.pointbalance = pointbalance;
     }
+
+    public Integer getRole() {return role;}
+
+    public void setRole(Integer role) {this.role = role;}
+
+    public Integer getGroupId() {return groupId;}
+
+    public void setGroupId(Integer groupId) {this.groupId = groupId;}
 }

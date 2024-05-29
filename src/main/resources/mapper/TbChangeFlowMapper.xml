@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.waterstation.waterstation.mapper.TbChangeFlowMapper">
+
+<!-- 通用查询映射结果 -->
+<resultMap id="BaseResultMap" type="com.waterstation.waterstation.entity.TbChangeFlow">
+    <id column="id" property="id" />
+    <result column="order_sn" property="orderSn" />
+    <result column="price" property="price" />
+    <result column="create_time" property="createTime" />
+    <result column="pay_time" property="payTime" />
+    <result column="is_pay" property="isPay" />
+    <result column="wx_order" property="wxOrder" />
+    <result column="userid" property="userid" />
+</resultMap>
+
+<!-- 通用查询结果列 -->
+<sql id="Base_Column_List">
+    id,order_sn,price,create_time,pay_time,is_pay,wx_order,userid
+</sql>
+
+</mapper>

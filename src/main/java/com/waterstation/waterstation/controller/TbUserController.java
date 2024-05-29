@@ -25,11 +25,12 @@ public class TbUserController {
     private TbUserService tbUserService;
 
 
+
     @GetMapping("/list")
     public List<TbUser> list(){return tbUserService.list();}
 
     @PostMapping("/listByOpenid")
-    public List<TbUser> listByid(@RequestBody Map<String, Object> requestParams){
+    public List<TbUser> listBy(@RequestBody Map<String, Object> requestParams){
         return tbUserService.listByMap(requestParams);
     }
 
@@ -37,23 +38,6 @@ public class TbUserController {
     public boolean save(@RequestBody TbUser tbUser){
         return tbUserService.save(tbUser);
     }
-
-//    @PostMapping("/incrementPointBalance")
-//    public boolean incrementPointBalance(@RequestBody Map<String, Object> requestParams) {
-//        Integer id = (Integer) requestParams.get("id");
-//        Integer type = (Integer) requestParams.get("type");
-//        if (type == 1) {
-//            TbUser user = tbUserService.getById(id);
-//            user.setId(id);
-//            user.setPointbalance(user.getPointbalance() + 100);
-//            return tbUserService.updateById(user);
-//        }else{
-//            TbUser user = tbUserService.getById(id);
-//            user.setId(id);
-//            user.setPointbalance(user.getPointbalance() - 100);
-//            return tbUserService.updateById(user);
-//        }
-//    }
 
     @PostMapping("/mod")
     public boolean mod(@RequestBody TbUser tbUser){

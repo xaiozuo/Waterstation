@@ -12,5 +12,5 @@ import com.waterstation.waterstation.entity.TbUser;
  * @since 2024-05-10
  */
 public interface TbUserMapper extends BaseMapper<TbUser> {
-    TbUser selectByOpenid(String openid);
+//    TbUser selectByOpenid(String openid);
 }

@@ -5,5 +5,5 @@ import com.waterstation.waterstation.entity.TbUser;
 
 public interface TbUserService extends IService<TbUser> {
 
-    TbUser getByOpenid(String openid);
+//    TbUser getByOpenid(String openid);
 }

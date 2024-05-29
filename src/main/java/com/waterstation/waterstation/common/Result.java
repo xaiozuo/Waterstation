@@ -20,7 +20,7 @@ public class Result {
     }
 
     public static Result success(){
-        return setMessageData(200, null, null);
+        return setMessageData(200, "下单出水成功", null);
     }
 
     public static Result success(String msg){
@@ -48,15 +48,18 @@ public class Result {
     }
 
     public static Result addPointSuccess(){
-        return setMessageData(200, "看广告增加积分成功", null);
+        return setMessageData(201, "看广告增加积分成功", null);
     }
 
     public static Result addPointFail(){
-        return setMessageData(400, "看广告增加积分失败", null);
+        return setMessageData(402, "看广告增加积分失败", null);
     }
 
-    public static Result pointNotEnough(){return setMessageData(400, "积分不足", null);}
+    public static Result pointNotEnough(){return setMessageData(403, "积分不足", null);}
     public static Result adviceNotExist(){return setMessageData(404, "设备不存在", null);}
+    public static Result adviceExist(){return setMessageData(200, "设备在线", null);}
+    public static Result failOrder(){return setMessageData(405, "下单失败", null);}
+    public static Result failNotifyDevice(){return setMessageData(406, "通知设备失败", null);}
 }
 
 //@AllArgsConstructor

@@ -3,8 +3,8 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: 12345678
-    url: jdbc:postgresql://localhost:5432/waterstation
-#    url: jdbc:postgresql://172.31.151.129:54320/waterstation
+#    url: jdbc:postgresql://localhost:5432/waterstation
+    url: jdbc:postgresql://172.31.151.129:54320/waterstation
     tomcat:
       max-active: 2048
       min-idle: 512
@@ -12,6 +12,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  # 定时任务相关配置
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
 server:
   servlet:
     context-parameters:
@@ -22,5 +27,14 @@ server:
     key-store: classpath:waterstation.hexishuzi.com.jks
     key-store-password: rilaesrj
     key-store-type: JKS
+#wxpay:
+#  mch:
+#    mchid:'商家id'
+#    key:'支付key'
+#  pay:
+#    appid: wx123456789a439 #微信公众号appid
+#    api_key: gwxkjvfewvfabvcrxgrawvgs924ceaxj #公众号设置的api密钥
+#    mch_id: 1603596731 #微信商户平台 商户id
+
 
 

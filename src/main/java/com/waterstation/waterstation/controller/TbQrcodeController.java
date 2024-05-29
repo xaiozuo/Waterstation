@@ -43,8 +43,9 @@ public class TbQrcodeController {
         jsonData.put("saler", saler);
 //        String filePath = "D:/phpstudy_pro/WWW/waterStation/";
         String filePath = "/mnt/Waterstation/qrcode/";
+
         tbQrcode.setCodeaddress(filePath);
-        String imgName = combinedData + ".jpg";
+        String imgName = combinedData + ".png";
         tbQrcode.setImgname(imgName);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -80,11 +81,6 @@ public class TbQrcodeController {
             e.printStackTrace();
         }
         return tbQrcodeService.updateById(tbQrcode);
-    }
-
-    @PostMapping("/saveOrMod")
-    public boolean saveOrMod(@RequestBody TbQrcode tbQrcode){
-        return tbQrcodeService.saveOrUpdate(tbQrcode);
     }
 
     @GetMapping("/delete")

@@ -1,7 +1,6 @@
 package com.waterstation.waterstation.controller;
 
 
-import com.waterstation.waterstation.entity.TbAdmin;
 import com.waterstation.waterstation.entity.TbPointrules;
 import com.waterstation.waterstation.service.TbPointrulesService;
 import org.springframework.beans.factory.annotation.Autowired;

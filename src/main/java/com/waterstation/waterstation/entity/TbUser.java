@@ -16,6 +16,9 @@ import lombok.EqualsAndHashCode;
  * @author zjj
  * @since 2024-05-10
  */
+/**
+ * 用户实体类
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="TbUser对象", description="")
@@ -27,83 +30,44 @@ public class TbUser implements Serializable {
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
 
+    /**
+     * 小程序获取的openid
+     */
     private String openid;
 
+    /**
+     * 用户头像
+     */
     private String profilePhoto;
 
+    /**
+     * 电话号码
+     */
     private String phone;
 
+    /**
+     * 用户姓名
+     */
     private String name;
 
+    /**
+     * 用户积分余额
+     */
     private Integer pointbalance;
 
+    /**
+     * 用户已看广告次数
+     */
     private Integer taskCount;
 
+    /**
+     * 用户权限
+     */
     private Integer role;
 
+    /**
+     * 用户所在群组
+     */
     private Integer groupId;
 
-    public String getProfilePhoto() {
-        return profilePhoto;
-    }
-
-    public void setProfilePhoto(String profilePhoto) {
-        this.profilePhoto = profilePhoto;
-    }
-
-    public Integer getTaskCount() {
-        return taskCount;
-    }
-
-    public void setTaskCount(Integer taskCount) {
-        this.taskCount = taskCount;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getOpenid() {
-        return openid;
-    }
-
-    public void setOpenid(String openid) {
-        this.openid = openid;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getPointbalance() {
-        return pointbalance;
-    }
-
-    public void setPointbalance(Integer pointbalance) {
-        this.pointbalance = pointbalance;
-    }
-
-    public Integer getRole() {return role;}
-
-    public void setRole(Integer role) {this.role = role;}
-
-    public Integer getGroupId() {return groupId;}
-
-    public void setGroupId(Integer groupId) {this.groupId = groupId;}
 }

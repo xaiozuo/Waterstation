@@ -13,6 +13,9 @@ import java.util.Map;
 @Controller
 @RequestMapping("/get")
 public class getUserPhoneController {
+    /**
+     * 获取用户手机号
+     */
     @PostMapping("/phone")
     public Map<String, Object> getPhone(@RequestBody Map<String, Object> requestParams) {
         String code = (String) requestParams.get("code");

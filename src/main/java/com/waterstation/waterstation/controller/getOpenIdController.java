@@ -15,6 +15,9 @@ import java.util.Map;
 @Controller
 @RequestMapping("/get")
 public class getOpenIdController {
+    /**
+     * 获取用户openid
+     */
     @PostMapping("/openid")
     public Map<String, String> getOpenid(@RequestBody Map<String, Object> requestParams) {
         String appid = "wx715a08a8d60a8595";

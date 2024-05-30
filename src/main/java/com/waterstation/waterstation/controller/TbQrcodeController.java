@@ -28,9 +28,15 @@ public class TbQrcodeController {
     @Autowired
     private TbQrcodeService tbQrcodeService;
 
+    /**
+     * 查询设备二维码信息
+     */
     @GetMapping("/list")
     public List<TbQrcode> list(){return tbQrcodeService.list();}
 
+    /**
+     * 生成二维码并且保存信息
+     */
     @PostMapping("/save")
     public boolean save(@RequestBody TbQrcode tbQrcode){
         String appId = tbQrcode.getAppid();
@@ -57,6 +63,9 @@ public class TbQrcodeController {
         return tbQrcodeService.save(tbQrcode);
     }
 
+    /**
+     * 修改设备信息并且生成新的二维码
+     */
     @PostMapping("/mod")
     public boolean mod(@RequestBody TbQrcode tbQrcode){
 

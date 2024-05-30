@@ -17,6 +17,9 @@ spring:
     job-store-type: jdbc
     jdbc:
       initialize-schema: never
+  web:
+    resources:
+      static-locations: file:/mnt/Waterstation/qrcode/
 server:
   servlet:
     context-parameters:

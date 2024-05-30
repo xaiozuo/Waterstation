@@ -21,8 +21,9 @@ import org.springframework.stereotype.Service;
  * @author zjj
  * @since 2024-05-10
  */
-@Getter
-@Setter
+/**
+ * 管理员实体类
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="TbAdmin对象", description="")
@@ -30,14 +31,29 @@ public class TbAdmin implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * id
+     */
     private Integer Id;
 
+    /**
+     * 管理员姓名
+     */
     private String adminName;
 
+    /**
+     * 管理员密码
+     */
     private String adminPassword;
 
+    /**
+     * 管理员权限
+     */
     private String permission;
 
+    /**
+     * 添加时间
+     */
     private LocalDateTime addTime;
 
 

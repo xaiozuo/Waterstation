@@ -1,8 +1,6 @@
 package com.waterstation.waterstation.controller;
 
 
-import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONObject;
 import com.waterstation.waterstation.common.Result;
 import com.waterstation.waterstation.entity.TbPointrules;
 import com.waterstation.waterstation.entity.TbPointtransactionrecords;
@@ -14,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.waterstation.waterstation.common.Result.*;
 
@@ -39,6 +35,9 @@ public class PointAddOrReduceController {
     private TbPointtransactionrecordsService tbPointtransactionrecordsService;
     @Autowired
     private TbPointrulesService tbPointrulesService;
+    /**
+     * 看广告加积分
+     */
     @PostMapping("/add")
     public Result incrementPointBalance(@RequestBody Map<String, Object> requestParams) {
         Integer userId = (Integer) requestParams.get("userId");

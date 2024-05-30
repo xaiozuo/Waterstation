@@ -17,6 +17,9 @@ import static com.waterstation.waterstation.common.Result.*;
 @Controller
 @RequestMapping("/get")
 public class getDeviceStateController {
+    /**
+     * 获取设备状态
+     */
     @PostMapping("/devicestate")
     public Result reducePointBalance(@RequestBody Map<String, Object> requestParams) {
         String appid = (String) requestParams.get("appid");

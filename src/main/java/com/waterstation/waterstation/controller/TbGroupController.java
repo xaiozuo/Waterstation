@@ -27,10 +27,16 @@ public class TbGroupController {
 //        }
 //        return null;
 //    }
+    /**
+     * 通过id查询群组
+     */
     @PostMapping("/listByid")
     public List<TbGroup> listById(@RequestBody Map<String, Object> requestParams){
         return tbGroupService.listByMap(requestParams);
     }
+    /**
+     * 通过群组id查询群成员
+     */
     @PostMapping("/byIdListAllUser")
     public List<TbUser> byIdListUser(@RequestBody Map<String, Object> requestParams){
         List<TbGroup> tbGroupList=tbGroupService.listByMap(requestParams);
@@ -40,6 +46,9 @@ public class TbGroupController {
         paramMap.put("group_id",tbGroup.getId());
         return tbUserService.listByMap(paramMap);
     }
+    /**
+     * 群主转让
+     */
     @PostMapping("/transfer")
     public boolean transferGroup(@RequestBody Map<String, Object> requestParams){
         String name = (String) requestParams.get("name");
@@ -57,6 +66,10 @@ public class TbGroupController {
     public boolean mod(@RequestBody TbGroup tbGroup){
         return tbGroupService.updateById(tbGroup);
     }
+
+    /**
+     * 创建群组
+     */
     @PostMapping("/createGroup")
     public TbGroup createGroup(@RequestBody TbGroup tbGroup){
         tbGroupService.save(tbGroup);

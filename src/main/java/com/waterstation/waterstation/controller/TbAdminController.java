@@ -17,6 +17,9 @@ import java.util.List;
  * @author zjj
  * @since 2024-05-10
  */
+/**
+ * 对管理员信息的增删改查
+ */
 @RestController
 @Controller
 @RequestMapping("/tb-admin")

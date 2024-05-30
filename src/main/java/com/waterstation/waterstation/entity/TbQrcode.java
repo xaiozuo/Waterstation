@@ -15,6 +15,9 @@ import lombok.EqualsAndHashCode;
  * @author zjj
  * @since 2024-05-10
  */
+/**
+ * 设备二维码实体类
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="TbQrcode对象", description="")
@@ -22,73 +25,39 @@ public class TbQrcode implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * id
+     */
     private String id;
 
+    /**
+     * 商户
+     */
     private String saler;
 
+    /**
+     * appid
+     */
     private String appid;
 
+    /**
+     * 出水口
+     */
     private BigDecimal outlet;
 
+    /**
+     * 中文地址
+     */
     private String chaddress;
 
+    /**
+     * 二维码图片名称
+     */
     private String imgname;
 
+    /**
+     * 二维码所在地址
+     */
     private String codeaddress;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getSaler() {
-        return saler;
-    }
-
-    public void setSaler(String saler) {
-        this.saler = saler;
-    }
-
-    public String getAppid() {
-        return appid;
-    }
-
-    public void setAppid(String appid) {
-        this.appid = appid;
-    }
-
-    public BigDecimal getOutlet() {
-        return outlet;
-    }
-
-    public void setOutlet(BigDecimal outlet) {
-        this.outlet = outlet;
-    }
-
-    public String getChaddress() {
-        return chaddress;
-    }
-
-    public void setChaddress(String chaddress) {
-        this.chaddress = chaddress;
-    }
-
-    public String getImgname() {
-        return imgname;
-    }
-
-    public void setImgname(String imgname) {
-        this.imgname = imgname;
-    }
-
-    public String getCodeaddress() {
-        return codeaddress;
-    }
-
-    public void setCodeaddress(String codeaddress) {
-        this.codeaddress = codeaddress;
-    }
 }

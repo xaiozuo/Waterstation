@@ -16,6 +16,9 @@ import java.util.List;
  * @author zjj
  * @since 2024-05-10
  */
+/**
+ * 积分规则的增删改查
+ */
 @RestController
 @RequestMapping("/tb-pointrules")
 public class TbPointrulesController {

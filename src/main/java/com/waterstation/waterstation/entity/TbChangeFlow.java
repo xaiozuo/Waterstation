@@ -3,98 +3,58 @@ package com.waterstation.waterstation.entity;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+/**
+ * （订单）零钱流水实体类
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="ChangeFlow", description="")
 public class TbChangeFlow implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * id
+     */
     private Integer id;
 
+    /**
+     * 订单号
+     */
     private String orderSn;
 
+    /**
+     * 价格
+     */
     private BigDecimal price;
 
+    /**
+     * 创建订单时间
+     */
     private LocalDateTime createTime;
 
+    /**
+     * 支付时间
+     */
     private LocalDateTime payTime;
 
+    /**
+     * 是否支付
+     */
     private boolean isPay;
 
+    /**
+     * 微信订单号
+     */
     private String wxOrder;
 
+    /**
+     * 用户id
+     */
     private Integer userid;
 
-    public Integer getUserid() {
-        return userid;
-    }
-
-    public void setUserid(Integer userid) {
-        this.userid = userid;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        id = id;
-    }
-
-    public String getOrderSn() {
-        return orderSn;
-    }
-
-    public void setOrderSn(String orderSn) {
-        this.orderSn = orderSn;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
-    public LocalDateTime getPayTime() {
-        return payTime;
-    }
-
-    public void setPayTime(LocalDateTime payTime) {
-        this.payTime = payTime;
-    }
-
-    public boolean isPay() {
-        return isPay;
-    }
-
-    public void setPay(boolean pay) {
-        isPay = pay;
-    }
-
-    public String getWxOrder() {
-        return wxOrder;
-    }
-
-    public void setWxOrder(String wxOrder) {
-        this.wxOrder = wxOrder;
-    }
 }

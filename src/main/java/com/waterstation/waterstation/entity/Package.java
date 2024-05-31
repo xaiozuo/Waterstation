@@ -1,18 +1,12 @@
 package com.waterstation.waterstation.entity;
 
-import java.time.LocalDateTime;
+import java.io.Serial;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-/**
- * <p>
- *
- * </p>
- *
- * @author zjj
- * @since 2024-05-10
- */
+
+
 /**
  * 管理员实体类
  */
@@ -21,12 +15,13 @@ import lombok.EqualsAndHashCode;
 @ApiModel(value="TbAdmin对象", description="")
 public class Package implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
      * id
      */
-    private Integer Id;
+    private Integer id;
 
     /**
      * 套餐水量

@@ -3,6 +3,9 @@ package com.waterstation.waterstation.common;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+/**
+ * @author Administrator
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -23,25 +26,25 @@ public class Result {
         return setMessageData(200, "下单出水成功", null);
     }
 
-    public static Result success(String msg){
-        return setMessageData(200, msg, null);
-    }
+//    public static Result success(String msg){
+//        return setMessageData(200, msg, null);
+//    }
 
     public static Result success(String msg, Object data){
         return setMessageData(200, msg, data);
     }
 
-    public static Result fail(){
-        return setMessageData(404, null, null);
-    }
-
-    public static Result fail(String msg){
-        return setMessageData(404, msg, null);
-    }
-
-    public static Result fail(String msg, Object data){
-        return setMessageData(404, msg, data);
-    }
+//    public static Result fail(){
+//        return setMessageData(404, null, null);
+//    }
+//
+//    public static Result fail(String msg){
+//        return setMessageData(404, msg, null);
+//    }
+//
+//    public static Result fail(String msg, Object data){
+//        return setMessageData(404, msg, data);
+//    }
 
     public static Result taskCountFull(){
         return setMessageData(401, "看广告次数已经用完了", null);

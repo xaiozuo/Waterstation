@@ -3,9 +3,11 @@ package com.waterstation.waterstation.controller;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import com.waterstation.waterstation.common.Result;
+import com.waterstation.waterstation.entity.Package;
 import com.waterstation.waterstation.entity.TbPointrules;
 import com.waterstation.waterstation.entity.TbPointtransactionrecords;
 import com.waterstation.waterstation.entity.TbUser;
+import com.waterstation.waterstation.service.PackageService;
 import com.waterstation.waterstation.service.TbPointrulesService;
 import com.waterstation.waterstation.service.TbPointtransactionrecordsService;
 import com.waterstation.waterstation.service.TbUserService;
@@ -33,7 +35,7 @@ public class getWaterWayController {
     @Autowired
     private TbPointtransactionrecordsService tbPointtransactionrecordsService;
     @Autowired
-    private TbPointrulesService tbPointrulesService;
+    private PackageService packageService;
     /**
      * 积分打水
      */
@@ -52,27 +54,34 @@ public class getWaterWayController {
         TbUser user = tbUserList.isEmpty()? null : tbUserList.get(0);
         assert user != null;
         Integer point = user.getPointbalance();
-        TbPointrules tbPointrules = tbPointrulesService.getById(1);
-        Integer reducePoint = tbPointrules.getReducePoint();
-        Integer exchangeWater = tbPointrules.getExchangeWater();
-        if (point < reducePoint) {
+        double wateramount = (double) requestParams.get("water_amount");
+        Map<String,Object> packageMap = new HashMap<>();
+        packageMap.put("water_amount",wateramount);
+        List<Package> packageList =packageService.listByMap(packageMap);
+        Package pg = packageList.isEmpty()? null : packageList.get(0);
+//        TbPointrules tbPointrules = tbPointrulesService.getById(1);
+//        Integer reducePoint = tbPointrules.getReducePoint();
+//        Integer exchangeWater = tbPointrules.getExchangeWater();
+        assert pg != null;
+        if (point < pg.getPoints()) {
             return pointNotEnough();
         } else {
             Integer userid = user.getId();
-            user.setPointbalance(point - reducePoint);
+            user.setPointbalance(point - pg.getPoints());
             pointreduce.setUserid(userid);
             pointreduce.setIncomeOrExpenseType(-1);
             pointreduce.setDeviceId(deviceid);
-            pointreduce.setPointValue(reducePoint);
+            pointreduce.setPointValue(pg.getPoints());
             pointreduce.setUserName(user.getName());
-            Integer value = exchangeWater;
+            String value = Double.toString(pg.getWaterAmount());
             String ch = "";
             tbUserService.updateById(user);
             tbPointtransactionrecordsService.save(pointreduce);
             Integer salerOrderIdInt = generateRandomNumber();
             String salerOrderId = String.valueOf(salerOrderIdInt);
+            String useridStr = String.valueOf(userid);
             String url1 = "api.happy-ti.com:2028/trade/qrcreate?appid=" + appid + "&saler=" + saler + "&deviceId=" + deviceid + "&value"
-                    + value + "&userid" + userid + "&ch" + ch + "&location" + location + "&salerOrderId" + salerOrderId;
+                    + value + "&userid" + useridStr + "&ch" + ch + "&location" + location + "&salerOrderId" + salerOrderId;
             String result1 = HttpUtil.get(url1);
             if(result1==null){
                 return failOrder();

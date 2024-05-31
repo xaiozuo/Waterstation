@@ -50,8 +50,7 @@ public class Result {
         return setMessageData(401, "看广告次数已经用完了", null);
     }
 
-    public static Result addPointSuccess(){
-        return setMessageData(201, "看广告增加积分成功", null);
+    public static Result addPointSuccess(Object data){return setMessageData(201, "看广告增加积分成功", null);
     }
 
     public static Result addPointFail(){

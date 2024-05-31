@@ -2,11 +2,16 @@ package com.waterstation.waterstation.controller;
 
 
 import com.waterstation.waterstation.entity.TbAdmin;
+import com.waterstation.waterstation.entity.TbGroup;
+import com.waterstation.waterstation.entity.TbPointrules;
 import com.waterstation.waterstation.service.TbAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -48,6 +53,21 @@ public class TbAdminController {
     public boolean delete(Integer id){
         return tbAdminService.removeById(id);
     }
+
+    @GetMapping("/login")
+    public boolean adminlogin(@RequestBody Map<String, Object> requestParams){
+        String username = (String) requestParams.get("appid");
+        String password = (String) requestParams.get("id");
+        return login(username, password);
+    }
+    public boolean login(String username, String password) {
+        HashMap<String, Object> paramMap = new HashMap<>();
+        paramMap.put("admin_name",username);
+        List<TbAdmin> tbAdmin = tbAdminService.listByMap(paramMap);
+        TbAdmin tbAdmin1 = tbAdmin.isEmpty()? null : tbAdmin.get(0);
+        return (tbAdmin1 != null && tbAdmin1.getAdminPassword().equals(password));
+    }
+
 
 //    public static void main(String[] args) {
 //        String username = "user1";

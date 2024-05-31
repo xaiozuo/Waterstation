@@ -71,7 +71,7 @@ public class PointAddOrReduceController {
         }
         tbuser.setPointbalance(tbuser.getPointbalance() + pointValue);
         if(tbUserService.updateById(tbuser)&&tbPointtransactionrecordsService.save(point)){
-            return addPointSuccess();
+            return addPointSuccess(pointValue);
         }
         return addPointFail();
     }

@@ -3,8 +3,8 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: 12345678
-    url: jdbc:postgresql://localhost:5432/waterstation
-#    url: jdbc:postgresql://172.31.151.129:54320/waterstation
+#    url: jdbc:postgresql://localhost:5432/waterstation
+    url: jdbc:postgresql://172.31.151.129:54320/waterstation
     tomcat:
       max-active: 2048
       min-idle: 512

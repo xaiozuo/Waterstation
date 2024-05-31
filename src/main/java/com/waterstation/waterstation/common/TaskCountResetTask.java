@@ -8,6 +8,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
+/**
+ * @author Administrator
+ */
 @EnableScheduling
 @Component
 public class TaskCountResetTask {

@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Administrator
+ */
 public class QRCodeGenerator {
     public static void generateQrCode(String data, String filePath) {
         try {

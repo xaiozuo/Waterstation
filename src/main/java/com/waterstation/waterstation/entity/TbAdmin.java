@@ -56,6 +56,13 @@ public class TbAdmin implements Serializable {
      */
     private LocalDateTime addTime;
 
+    /**
+     * 电话号码
+     */
+    private String phoneNumber;
 
-
+    /**
+     * 性别
+     */
+    private String gender;
 }

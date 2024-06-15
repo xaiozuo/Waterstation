@@ -11,11 +11,12 @@
         <result column="chaddress" property="chaddress" />
         <result column="imgname" property="imgname" />
         <result column="codeaddress" property="codeaddress" />
+        <result column="device_name" property="deviceName" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, outlet, chaddress, imgname, codeaddress,saler,appid
+        id, outlet, chaddress, imgname, codeaddress,saler,appid,device_name
     </sql>
 
 </mapper>

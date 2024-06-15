@@ -1,17 +1,15 @@
 package com.waterstation.waterstation.controller;
 
-
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.waterstation.waterstation.common.Result;
 import com.waterstation.waterstation.entity.TbAdmin;
-import com.waterstation.waterstation.entity.TbGroup;
-import com.waterstation.waterstation.entity.TbPointrules;
 import com.waterstation.waterstation.service.TbAdminService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -26,9 +24,42 @@ public class TbAdminController {
     @Autowired
     private TbAdminService tbAdminService;
 
+//    @GetMapping("/list")
+//    public List<TbAdmin> list(){
+//        return tbAdminService.list();
+//    }
     @GetMapping("/list")
-    public List<TbAdmin> list(){
-        return tbAdminService.list();
+    public List<TbAdmin> list(
+            Integer idFilter,
+            String adminNameFilter,
+            String adminPasswordFilter,
+            String permissionFilter,
+            String addTimeFilter,
+            String phoneNumberFilter,
+            String genderFilter) {
+        QueryWrapper<TbAdmin> queryWrapper = new QueryWrapper<>();
+        if (idFilter != null) {
+            queryWrapper.eq("id", idFilter);
+        }
+        if (adminNameFilter != null) {
+            queryWrapper.like("admin_name", adminNameFilter);
+        }
+        if (adminPasswordFilter != null) {
+            queryWrapper.eq("admin_password", adminPasswordFilter);
+        }
+        if (permissionFilter != null) {
+            queryWrapper.eq("permission", permissionFilter);
+        }
+        if (addTimeFilter != null) {
+            queryWrapper.eq("add_time", addTimeFilter);
+        }
+        if (phoneNumberFilter != null) {
+            queryWrapper.eq("phone_number", phoneNumberFilter);
+        }
+        if (genderFilter != null) {
+            queryWrapper.eq("gender", genderFilter);
+        }
+        return tbAdminService.list(queryWrapper);
     }
 
     //新增
@@ -54,19 +85,41 @@ public class TbAdminController {
         return tbAdminService.removeById(id);
     }
 
-    @GetMapping("/login")
-    public boolean adminlogin(@RequestBody Map<String, Object> requestParams){
-        String username = (String) requestParams.get("appid");
-        String password = (String) requestParams.get("id");
-        return login(username, password);
+    @PostMapping("/login")
+    public Result adminlogin(HttpServletRequest request) {
+        String phoneNumber = request.getParameter("phoneNumber");
+        String password = request.getParameter("adminPassword");
+        if(phoneNumber!= null && !phoneNumber.isEmpty()){
+            HashMap<String, Object> paramMap = new HashMap<>();
+            paramMap.put("phone_number",phoneNumber);
+            List<TbAdmin> tbAdmin = tbAdminService.listByMap(paramMap);
+            if(tbAdmin.isEmpty()){
+                return Result.fail("002","未查询到用户",null);
+            }
+            TbAdmin tbAdmin1 = tbAdmin.get(0);
+            if(password.isEmpty()){
+                return  Result.fail("003","密码为空",null);
+            }
+            if(tbAdmin1.getAdminPassword().equals(password)){
+                return Result.success("登录成功",tbAdmin1);
+            }else{
+                return Result.fail("004","密码错误",null);
+            }
+
+        }else{
+            return Result.fail("001","号码为空",null);
+        }
+
+//        return login(phoneNumber, password);
     }
-    public boolean login(String username, String password) {
-        HashMap<String, Object> paramMap = new HashMap<>();
-        paramMap.put("admin_name",username);
-        List<TbAdmin> tbAdmin = tbAdminService.listByMap(paramMap);
-        TbAdmin tbAdmin1 = tbAdmin.isEmpty()? null : tbAdmin.get(0);
-        return (tbAdmin1 != null && tbAdmin1.getAdminPassword().equals(password));
-    }
+
+//    public boolean login(String phoneNumber, String password) {
+//        HashMap<String, Object> paramMap = new HashMap<>();
+//        paramMap.put("phone_number",phoneNumber);
+//        List<TbAdmin> tbAdmin = tbAdminService.listByMap(paramMap);
+//        TbAdmin tbAdmin1 = tbAdmin.isEmpty()? null : tbAdmin.get(0);
+//        return (tbAdmin1 != null && tbAdmin1.getAdminPassword().equals(password));
+//    }
 
 
 //    public static void main(String[] args) {

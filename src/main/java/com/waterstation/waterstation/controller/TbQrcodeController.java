@@ -1,12 +1,15 @@
 package com.waterstation.waterstation.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.waterstation.waterstation.entity.TbPointtransactionrecords;
 import com.waterstation.waterstation.entity.TbQrcode;
 import com.waterstation.waterstation.service.TbQrcodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +34,46 @@ public class TbQrcodeController {
     /**
      * 查询设备二维码信息
      */
+//    @GetMapping("/list")
+//    public List<TbQrcode> list(){return tbQrcodeService.list();}
     @GetMapping("/list")
-    public List<TbQrcode> list(){return tbQrcodeService.list();}
+    public List<TbQrcode> list(
+            String idFilter,
+            String chaddressFilter,
+            String imgnameFilter,
+            String codeaddressFilter,
+            String salerFilter,
+            BigDecimal outletFilter,
+            String appidFilter,
+            String deviceNameFilter) {
+        QueryWrapper<TbQrcode> queryWrapper = new QueryWrapper<>();
+        if (idFilter != null) {
+            queryWrapper.eq("id", idFilter);
+        }
+        if (chaddressFilter != null) {
+            queryWrapper.like("chaddress", chaddressFilter);
+        }
+        if (imgnameFilter != null) {
+            queryWrapper.eq("imgname", imgnameFilter);
+        }
+        if (codeaddressFilter != null) {
+            queryWrapper.eq("codeaddress", codeaddressFilter);
+        }
+        if (salerFilter != null) {
+            queryWrapper.eq("saler", salerFilter);
+        }
+        if (appidFilter != null) {
+            queryWrapper.eq("appid", appidFilter);
+        }
+        if (outletFilter != null) {
+            queryWrapper.eq("outlet", outletFilter);
+        }
+        if (deviceNameFilter != null) {
+            queryWrapper.eq("device_name", deviceNameFilter);
+        }
+
+        return tbQrcodeService.list(queryWrapper);
+    }
 
     /**
      * 生成二维码并且保存信息

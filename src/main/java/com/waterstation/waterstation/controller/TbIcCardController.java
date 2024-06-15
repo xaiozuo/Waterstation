@@ -2,6 +2,8 @@ package com.waterstation.waterstation.controller;
 
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.waterstation.waterstation.entity.TbAdmin;
 import com.waterstation.waterstation.entity.TbIcCard;
 import com.waterstation.waterstation.service.TbIcCardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +22,25 @@ public class TbIcCardController {
     /**
      * 查询ic卡信息
      */
+//    @GetMapping("/list")
+//    public List<TbIcCard> list(){return tbIcCardService.list();}
     @GetMapping("/list")
-    public List<TbIcCard> list(){return tbIcCardService.list();}
-
+    public List<TbIcCard> list(
+            Integer idFilter,
+            String openidFilter,
+            String icidFilter) {
+        QueryWrapper<TbIcCard> queryWrapper = new QueryWrapper<>();
+        if (idFilter != null) {
+            queryWrapper.eq("id", idFilter);
+        }
+        if (openidFilter != null) {
+            queryWrapper.like("openid", openidFilter);
+        }
+        if (icidFilter != null) {
+            queryWrapper.eq("icid", icidFilter);
+        }
+        return tbIcCardService.list(queryWrapper);
+    }
     /**
      * 添加ic卡信息
      */

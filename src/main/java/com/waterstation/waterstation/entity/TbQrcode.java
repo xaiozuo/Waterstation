@@ -60,4 +60,9 @@ public class TbQrcode implements Serializable {
      */
     private String codeaddress;
 
+    /**
+     * *设备名称
+     */
+    private String deviceName;
+
 }

@@ -54,4 +54,9 @@ public class TbPointrules implements Serializable {
      * 积分兑换水的水量
      */
     private Integer exchangeWater;
+
+    /**
+     * 积分兑换ic卡1元需要的积分
+     */
+    private Integer exchangeic;
 }

@@ -17,7 +17,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, openid,profilePhoto, phone, role,name, pointbalance,taskCount,groupId
+        id, openid,profile_photo, phone, role,name, pointbalance,task_count,group_id
     </sql>
 
 </mapper>

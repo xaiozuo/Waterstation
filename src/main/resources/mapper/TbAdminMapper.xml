@@ -6,6 +6,8 @@
     <resultMap id="BaseResultMap" type="com.waterstation.waterstation.entity.TbAdmin">
         <id column="id" property="adminId" />
         <result column="admin_name" property="adminName" />
+        <result column="phone_number" property="phoneNumber" />
+        <result column="gender" property="gender" />
         <result column="admin_password" property="adminPassword" />
         <result column="permission" property="permission" />
         <result column="add_time" property="addTime" />
@@ -13,7 +15,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, admin_name, admin_password, permission, add_time
+        id, admin_name, admin_password, permission, add_time,phone_number,gender
     </sql>
 
 </mapper>

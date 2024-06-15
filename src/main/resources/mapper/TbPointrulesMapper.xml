@@ -10,11 +10,12 @@
         <result column="increasepoint" property="increasepoint" />
         <result column="reduce_point" property="reducePoint" />
         <result column="exchange_water" property="exchangeWater" />
+        <result column="exchangeic" property="exchangeic" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, rulesname, counts, increasepoint,reduce_point,exchange_water
+        id, rulesname, counts, increasepoint,reduce_point,exchange_water,exchangeic
     </sql>
 
 </mapper>

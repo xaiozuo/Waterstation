@@ -1,6 +1,5 @@
 package com.waterstation.waterstation.service.Impl;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.waterstation.waterstation.entity.TbQrcode;
 import com.waterstation.waterstation.mapper.TbQrcodeMapper;

@@ -23,4 +23,12 @@ server:
     key-store-password: rilaesrj
     key-store-type: JKS
 
+  # 微信支付配置 notifyUrl：微信支付异步回调地址
+  pay:
+    appId: wx715a08a8d60a8595 #应用id
+    apiKey: #商户私钥key
+    mchId: 1677661558 #商户id
+    appSecret: 24f03b851b81a1225c43f17535886eb9 #小程序密钥
+    notifyUrl: /weixin/callback #支付回调地址
+
 

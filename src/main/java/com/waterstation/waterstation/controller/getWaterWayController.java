@@ -3,10 +3,11 @@ package com.waterstation.waterstation.controller;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import com.waterstation.waterstation.common.Result;
+import com.waterstation.waterstation.entity.TbGroup;
+import com.waterstation.waterstation.entity.TbGroupPointFlow;
 import com.waterstation.waterstation.entity.TbPointtransactionrecords;
 import com.waterstation.waterstation.entity.TbUser;
-import com.waterstation.waterstation.service.TbPointtransactionrecordsService;
-import com.waterstation.waterstation.service.TbUserService;
+import com.waterstation.waterstation.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 import static com.waterstation.waterstation.common.Result.*;
+import static net.sf.jsqlparser.util.validation.metadata.NamedObject.user;
+
 /**
  * 打水方式
  * @author Administrator
@@ -26,97 +29,74 @@ public class getWaterWayController {
     @Autowired
     private TbUserService tbUserService;
     @Autowired
+    private TbGroupService tbGroupService;
+    @Autowired
     private TbPointtransactionrecordsService tbPointtransactionrecordsService;
+    @Autowired
+    private TbGroupPointFlowService tbGroupPointFlowService;
     /**
      * 积分打水
      */
     @PostMapping("/byPoint")
     public Result getWaterByPoint(@RequestBody Map<String, Object> requestParams) {
-//        TbPointtransactionrecords pointreduce = new TbPointtransactionrecords();
-//        String user0 = (String) requestParams.get("userId");
-//        String userIdsStr = (String) requestParams.get("user_ids"); // 获取多个用户 id 字符串
-//        String[] userIds = userIdsStr.split(","); // 分割得到单个用户 id 数组
-//        String deviceId = (String) requestParams.get("deviceId");
-//        Integer point1 = (Integer) requestParams.get("point");
-//
-//        for (String userId : userIds) {
-//            Map<String, Object> userMap = new HashMap<>();
-//            userMap.put("openid", userId);
-//
-//            List<TbUser> tbUserList = tbUserService.listByMap(userMap);
-//            TbUser user = tbUserList.isEmpty()? null : tbUserList.get(0);
-//
-//            if (user == null) {
-//                continue; // 处理用户不存在的情况
-//            }
-//
-//            assert user!= null;
-//            Integer point = user.getPointbalance();
-//
-//            // 以下是针对每个用户的处理逻辑
-//            if (point < point1) {
-////                return pointNotEnough();
-//                point1 = point1 - point;
-//            } else {
-//
-//                Map<String, Object> userMap1 = new HashMap<>();
-//                userMap1.put("openid", user0);
-//                tbUserList = tbUserService.listByMap(userMap1);
-//                user = tbUserList.isEmpty()? null : tbUserList.get(0);
-//                Integer userid = null;
-//                if (user != null) {
-//                    userid = user.getId();
-//                    user.setPointbalance(point - point1);
-//                    pointreduce.setUserName(user.getName());
-//                }
-//                pointreduce.setUserid(userid);
-//                pointreduce.setIncomeOrExpenseType(-1);
-//                pointreduce.setDeviceId(deviceId);
-//                pointreduce.setPointValue(point1);
-//                if(tbUserService.updateById(user)&&tbPointtransactionrecordsService.save(pointreduce)){
-//                    return success("扣除积分成功");
-//                }else{
-//                    return fail("扣除积分失败");
-//                }
-//
-//            }
-//
-//        // 可以根据需要添加整体的处理结果返回
-//        return null;
-        TbPointtransactionrecords pointreduce = new TbPointtransactionrecords();
-        String appid = (String) requestParams.get("openid");
+        String openid = (String) requestParams.get("openid");
+        String groupidStr =(String) requestParams.get("groupid");
+        Integer groupid = null;
+        if (groupidStr!= null) {
+            groupid = Integer.valueOf(groupidStr);
+        }
         String deviceId = (String) requestParams.get("deviceId");
+        Integer point1 = (Integer) requestParams.get("point");
+        boolean hasGroupId = requestParams.containsKey("groupid");
         Map<String,Object> userMap = new HashMap<>();
-        userMap.put("openid",appid);
+        userMap.put("openid",openid);
         List<TbUser> tbUserList=tbUserService.listByMap(userMap);
         TbUser user = tbUserList.isEmpty()? null : tbUserList.get(0);
         assert user != null;
-        Integer point = user.getPointbalance();
-//        double wateramount = (double) requestParams.get("water_amount");
-        Integer point1 = (Integer) requestParams.get("point");
-//        Map<String,Object> packageMap = new HashMap<>();
-//        packageMap.put("water_amount",wateramount);
-//        List<Package> packageList =packageService.listByMap(packageMap);
-//        Package pg = packageList.isEmpty()? null : packageList.get(0);
-//        TbPointrules tbPointrules = tbPointrulesService.getById(1);
-//        Integer reducePoint = tbPointrules.getReducePoint();
-//        Integer exchangeWater = tbPointrules.getExchangeWater();
-//        assert pg != null;
-        if (point < point1) {
-            return pointNotEnough();
-        } else {
-            Integer userid = user.getId();
-            user.setPointbalance(point - point1);
-            pointreduce.setUserid(userid);
-            pointreduce.setIncomeOrExpenseType(-1);
-            pointreduce.setDeviceId(deviceId);
-            pointreduce.setPointValue(point1);
-            pointreduce.setUserName(user.getName());
-            if(tbUserService.updateById(user)&&tbPointtransactionrecordsService.save(pointreduce)){
-                return success("扣除积分成功");
-            }else{
-                return fail("扣除积分失败");
+        if(hasGroupId) {
+            TbGroupPointFlow tbGroupPointFlow = new TbGroupPointFlow();
+            Map<String,Object> groupMap = new HashMap<>();
+            groupMap.put("id",groupid);
+            List<TbGroup> tbGroupList = tbGroupService.listByMap(groupMap);
+            TbGroup group = tbGroupList.isEmpty()? null : tbGroupList.get(0);
+            assert group != null;
+            Integer point = group.getGroupPoint();
+            if (point < point1) {
+                return pointNotEnough();
+            } else {
+                group.setGroupPoint(point - point1);
+                tbGroupPointFlow.setGroupid(groupid);
+                tbGroupPointFlow.setIncomeOrExpenseType(-1);
+                tbGroupPointFlow.setGroupName(group.getGroupName());
+                tbGroupPointFlow.setPointValue(point1);
+                tbGroupPointFlow.setOpenid(openid);
+                tbGroupPointFlow.setUsername(user.getName());
+                if (tbGroupService.updateById(group) && tbGroupPointFlowService.save(tbGroupPointFlow)) {
+                    return success("扣除积分成功");
+                } else {
+                    return fail("扣除积分失败");
+                }
             }
+        }else {
+            TbPointtransactionrecords pointreduce = new TbPointtransactionrecords();
+            Integer point = user.getPointbalance();
+            if (point < point1) {
+                return pointNotEnough();
+            } else {
+                Integer userid = user.getId();
+                user.setPointbalance(point - point1);
+                pointreduce.setUserid(userid);
+                pointreduce.setIncomeOrExpenseType(-1);
+                pointreduce.setDeviceId(deviceId);
+                pointreduce.setPointValue(point1);
+                pointreduce.setUserName(user.getName());
+                if (tbUserService.updateById(user) && tbPointtransactionrecordsService.save(pointreduce)) {
+                    return success("扣除积分成功");
+                } else {
+                    return fail("扣除积分失败");
+                }
+            }
+
 
 //            Integer salerOrderIdInt = generateRandomNumber();
 //            String salerOrderId = String.valueOf(salerOrderIdInt);

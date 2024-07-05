@@ -83,6 +83,7 @@ public class TbQrcodeController {
         String appId = tbQrcode.getAppid();
         String id = tbQrcode.getId();
         String saler = tbQrcode.getSaler();
+        String deviceName = tbQrcode.getDeviceName();
         String combinedData = appId + id + saler;
         Map<String, String> jsonData = new HashMap<>();
         jsonData.put("appId", appId);
@@ -97,7 +98,7 @@ public class TbQrcodeController {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             String json = objectMapper.writeValueAsString(jsonData);
-            generateQrCode(json,filePath + imgName);
+            generateQrCode(json,filePath + imgName,deviceName);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,6 +114,7 @@ public class TbQrcodeController {
         String appId = tbQrcode.getAppid();
         String id = tbQrcode.getId();
         String saler = tbQrcode.getSaler();
+        String deviceName = tbQrcode.getDeviceName();
         String combinedData = appId + id + saler;
         Map<String, String> jsonData = new HashMap<>();
         jsonData.put("appId", appId);
@@ -121,12 +123,12 @@ public class TbQrcodeController {
 //        String filePath = "D:/phpstudy_pro/WWW/waterStation/";
         String filePath = "/mnt/Waterstation/qrcode/";
         tbQrcode.setCodeaddress(filePath);
-        String imgName = combinedData + ".jpg";
+        String imgName = combinedData + ".png";
         tbQrcode.setImgname(imgName);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             String json = objectMapper.writeValueAsString(jsonData);
-            generateQrCode(json,filePath + imgName);
+            generateQrCode(json,filePath + imgName,deviceName);
         } catch (Exception e) {
             e.printStackTrace();
         }

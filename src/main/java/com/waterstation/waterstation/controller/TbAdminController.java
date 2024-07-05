@@ -5,11 +5,14 @@ import com.waterstation.waterstation.common.Result;
 import com.waterstation.waterstation.entity.TbAdmin;
 import com.waterstation.waterstation.service.TbAdminService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import java.util.HashMap;
-import java.util.List;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 
 /**
@@ -20,6 +23,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/tb-admin")
 public class TbAdminController {
+
+    // 假设超级管理员的用户 ID
+    private static final String SUPER_ADMIN_ID = "18888888888";
 
     @Autowired
     private TbAdminService tbAdminService;
@@ -32,11 +38,11 @@ public class TbAdminController {
     public List<TbAdmin> list(
             Integer idFilter,
             String adminNameFilter,
-            String adminPasswordFilter,
+//            String adminPasswordFilter,
             String permissionFilter,
             String addTimeFilter,
             String phoneNumberFilter,
-            String genderFilter) {
+            String genderFilter) throws InvocationTargetException, IllegalAccessException {
         QueryWrapper<TbAdmin> queryWrapper = new QueryWrapper<>();
         if (idFilter != null) {
             queryWrapper.eq("id", idFilter);
@@ -44,9 +50,9 @@ public class TbAdminController {
         if (adminNameFilter != null) {
             queryWrapper.like("admin_name", adminNameFilter);
         }
-        if (adminPasswordFilter != null) {
-            queryWrapper.eq("admin_password", adminPasswordFilter);
-        }
+//        if (adminPasswordFilter != null) {
+//            queryWrapper.eq("admin_password", adminPasswordFilter);
+//        }
         if (permissionFilter != null) {
             queryWrapper.eq("permission", permissionFilter);
         }
@@ -59,7 +65,22 @@ public class TbAdminController {
         if (genderFilter != null) {
             queryWrapper.eq("gender", genderFilter);
         }
-        return tbAdminService.list(queryWrapper);
+        // 获取包含所有字段的列表
+        List<TbAdmin> adminList = tbAdminService.list(queryWrapper);
+        // 创建新的列表用于存储不包含密码字段的结果
+        List<TbAdmin> resultList = new ArrayList<>();
+        for (TbAdmin admin : adminList) {
+            TbAdmin newAdmin = new TbAdmin();
+            newAdmin.setId(admin.getId());
+            newAdmin.setAdminName(admin.getAdminName());
+            newAdmin.setPermission(admin.getPermission());
+            newAdmin.setAddTime(admin.getAddTime());
+            newAdmin.setPhoneNumber(admin.getPhoneNumber());
+            newAdmin.setGender(admin.getGender());
+            newAdmin.setAdminPassword(null);
+            resultList.add(newAdmin);
+        }
+        return resultList;
     }
 
     //新增
@@ -90,18 +111,24 @@ public class TbAdminController {
         String phoneNumber = request.getParameter("phoneNumber");
         String password = request.getParameter("adminPassword");
         if(phoneNumber!= null && !phoneNumber.isEmpty()){
-            HashMap<String, Object> paramMap = new HashMap<>();
-            paramMap.put("phone_number",phoneNumber);
-            List<TbAdmin> tbAdmin = tbAdminService.listByMap(paramMap);
-            if(tbAdmin.isEmpty()){
-                return Result.fail("002","未查询到用户",null);
+//            HashMap<String, Object> paramMap = new HashMap<>();
+//            paramMap.put("phone_number",phoneNumber);
+//            List<TbAdmin> tbAdmin = tbAdminService.listByMap(paramMap);
+//            if(tbAdmin.isEmpty()){
+//                return Result.fail("002","未查询到用户",null);
+//            }
+//            TbAdmin tbAdmin1 = tbAdmin.get(0);
+            TbAdmin tbAdmin1 = queryByphoneNumber(phoneNumber);
+            if(tbAdmin1==null){
+                return Result.fail("002","未查询到管理员",null);
             }
-            TbAdmin tbAdmin1 = tbAdmin.get(0);
             if(password.isEmpty()){
                 return  Result.fail("003","密码为空",null);
             }
             if(tbAdmin1.getAdminPassword().equals(password)){
-                return Result.success("登录成功",tbAdmin1);
+                Map<String, Object> adminMap = objectToMap(tbAdmin1);
+                adminMap.remove("adminPassword");  // 移除密码字段
+                return Result.success("登录成功",adminMap);
             }else{
                 return Result.fail("004","密码错误",null);
             }
@@ -111,6 +138,70 @@ public class TbAdminController {
         }
 
 //        return login(phoneNumber, password);
+    }
+
+    @PostMapping("/updatePassword")
+    public Result updatePassword(@RequestBody Map<String, Object> params) {
+        // 从参数中获取用户标识、新密码和旧密码
+        Object userIdObj = params.get("phoneNumber");
+        Object newPasswordObj = params.get("newPassword");
+        Object oldPasswordObj = params.get("oldPassword");
+
+        if (userIdObj == null || newPasswordObj == null || oldPasswordObj == null) {
+            return Result.fail("005","用户id或者密码不能为空",null);
+        }
+
+        String userId = userIdObj.toString();
+        String newPassword = newPasswordObj.toString();
+        String oldPassword = oldPasswordObj.toString();
+
+        // 模拟检查旧密码是否正确
+        if (!isOldPasswordCorrect(userId, oldPassword)) {
+            return Result.fail("006","旧密码错误",null);
+        }
+
+        // 检查是否为超级管理员，超级管理员不让修改密码
+        if (Objects.equals(userId, SUPER_ADMIN_ID)) {
+            return Result.fail("007","超级管理员不允许修改密码",null);
+        }
+
+        // 假设这里将用户标识和新密码保存到数据库或进行其他修改密码的操作
+        TbAdmin tbAdmin = queryByphoneNumber(userId);
+        if (tbAdmin != null) {
+            tbAdmin.setAdminPassword(newPassword);
+        }
+        if(tbAdminService.updateById(tbAdmin)){
+            // 以下是模拟成功修改密码的返回
+            return Result.success("密码修改成功！");
+        }else{
+            return Result.fail("008","数据库修改密码错误",null);
+        }
+
+
+    }
+
+    // 模拟检查旧密码是否正确的方法
+    private boolean isOldPasswordCorrect(String userId, String oldPassword) {
+        // 在此处实现检查旧密码是否正确的逻辑，例如与数据库中存储的密码进行比较
+        TbAdmin tbAdmin = queryByphoneNumber(userId);
+        if(tbAdmin==null){
+            return false;
+        }
+        // 这里简单模拟返回 true
+        if(Objects.equals(oldPassword, tbAdmin.getAdminPassword())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    private TbAdmin queryByphoneNumber(String phoneNumber){
+        HashMap<String, Object> paramMap = new HashMap<>();
+        paramMap.put("phone_number",phoneNumber);
+        List<TbAdmin> tbAdmin = tbAdminService.listByMap(paramMap);
+        if(tbAdmin.isEmpty()){
+            return null;
+        }
+        return tbAdmin.get(0);
     }
 
 //    public boolean login(String phoneNumber, String password) {
@@ -189,4 +280,18 @@ public class TbAdminController {
 //            return false;
 //        }
 //    }
+public static Map<String, Object> objectToMap(Object obj) {
+    Map<String, Object> map = new HashMap<>();
+    Class<?> clazz = obj.getClass();
+    Field[] fields = clazz.getDeclaredFields();
+    for (Field field : fields) {
+        field.setAccessible(true);
+        try {
+            map.put(field.getName(), field.get(obj));
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+    return map;
+}
 }

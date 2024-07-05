@@ -2,10 +2,10 @@ package com.waterstation.waterstation.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.waterstation.waterstation.common.Result;
-import com.waterstation.waterstation.entity.TbAdmin;
-import com.waterstation.waterstation.entity.TbGroup;
-import com.waterstation.waterstation.entity.TbUser;
+import com.waterstation.waterstation.entity.*;
+import com.waterstation.waterstation.service.TbGroupPointFlowService;
 import com.waterstation.waterstation.service.TbGroupService;
+import com.waterstation.waterstation.service.TbPointtransactionrecordsService;
 import com.waterstation.waterstation.service.TbUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +26,10 @@ public class TbGroupController {
     private TbGroupService tbGroupService;
     @Autowired
     private TbUserService tbUserService;
+    @Autowired
+    private TbPointtransactionrecordsService tbPointtransactionrecordsService;
+    @Autowired
+    private TbGroupPointFlowService tbGroupPointFlowService;
 //    @GetMapping("/assessRole")
 //    public String assessRole(@RequestBody Map<String, Object> requestParams) {
 //        List<TbGroup> tbGroupList= tbGroupService.listByMap(requestParams);
@@ -111,47 +115,108 @@ public class TbGroupController {
         return tbGroup1;
     }
     @PostMapping("/transfergrouppoint")
-    public Result transferGroupPoint(@RequestBody Map<String, Object> requestParams){
+    public Result transferGroupPoint(@RequestBody TransferGroupPointRequest requestParams) {
+        String groupId = requestParams.getGroupId();
+        Integer groupIdInt = Integer.valueOf(groupId);
+        Integer groupPoint = 0;
 
-//        String userIdsStr = (String) requestParams.get("user_ids"); // 获取多个用户 id 字符串
-//        String[] userIds = userIdsStr.split(","); // 分割得到单个用户 id 数组
-//        String groupId = (String) requestParams.get("groupId");
-//        for (String userId : userIds) {
-//            Map<String, Object> userMap = new HashMap<>();
-//            userMap.put("openid", userId);
-//            List<TbUser> tbUserList = tbUserService.listByMap(userMap);
-//            TbUser user = tbUserList.isEmpty()? null : tbUserList.get(0);
-//            if (user == null) {
-//                continue; // 处理用户不存在的情况
-//            }
-//            assert user!= null;
-//            Integer point = user.getPointbalance();
-//            // 以下是针对每个用户的处理逻辑
-        Integer openid = (Integer) requestParams.get("openid");
-        Integer point = (Integer) requestParams.get("point");
-        String groupId = (String) requestParams.get("groupId");
-        Map<String,Object> userMap = new HashMap<>();
-        userMap.put("openid",openid);
-        List<TbUser> tbUserList=tbUserService.listByMap(userMap);
-        TbUser user = tbUserList.isEmpty()? null : tbUserList.get(0);
-        assert user != null;
-        Integer point1 = user.getPointbalance();
-        if (point1 < point) {
-            return pointNotEnough();
-        } else {
-            Integer userid = user.getId();
-            user.setPointbalance(point1 - point);
+        for (TransferGroupPointRequest.UserIdPoint userParam : requestParams.getUserIds()) {
+            String openid = userParam.getOpenid();
+            Integer point = userParam.getPoint();
 
-            if (tbUserService.updateById(user)) {
-                return success("扣除积分成功");
-            } else {
-                return fail("扣除积分失败");
+            Map<String, Object> userMap = new HashMap<>();
+            userMap.put("openid", openid);
+            List<TbUser> tbUserList = tbUserService.listByMap(userMap);
+            TbUser user = tbUserList.isEmpty()? null : tbUserList.get(0);
+
+            if (user == null) {
+                continue; // 处理用户不存在的情况
             }
-//            Map<String, Object> groupMap = new HashMap<>();
-//            groupMap.put("id", groupId);
-//            List<TbGroup> tbGroupList = tbGroupService.listByMap(groupMap);
-//
-//            return Result.success("群组积分转换成功");
+
+            assert user!= null;
+            Integer userPoint = user.getPointbalance();
+            TbPointtransactionrecords pointReduce = new TbPointtransactionrecords();
+
+            if (userPoint < point) {
+                continue;
+            } else {
+                Integer userid = user.getId();
+                user.setPointbalance(userPoint - point);
+                pointReduce.setUserid(userid);
+                pointReduce.setIncomeOrExpenseType(-1);
+                pointReduce.setPointValue(point);
+                pointReduce.setUserName(user.getName());
+
+                groupPoint += point;
+            }
+            if(!tbUserService.updateById(user) ||!tbPointtransactionrecordsService.save(pointReduce)){
+                return Result.fail("用户扣积分失败");
+            }
+        }
+
+        Map<String, Object> groupMap = new HashMap<>();
+        groupMap.put("id", groupIdInt);
+        List<TbGroup> tbGroupList = tbGroupService.listByMap(groupMap);
+        TbGroup group = tbGroupList.isEmpty()? null : tbGroupList.get(0);
+
+        assert group!= null;
+        Integer originalGroupPoint = group.getGroupPoint();
+        group.setGroupPoint(originalGroupPoint + groupPoint);
+
+        TbGroupPointFlow tbGroupPointFlow = new TbGroupPointFlow();
+        tbGroupPointFlow.setGroupid(Integer.valueOf(groupId));
+        tbGroupPointFlow.setIncomeOrExpenseType(1);
+        tbGroupPointFlow.setGroupName(group.getGroupName());
+        tbGroupPointFlow.setPointValue(groupPoint);
+
+        if (tbGroupService.updateById(group) && tbGroupPointFlowService.save(tbGroupPointFlow)) {
+            return success("积分已转至群组");
+        } else {
+            return fail("积分转群组失败");
         }
     }
+
+//    @PostMapping("/transfergrouppoint")
+//    public Result transferGroupPoint(@RequestBody Map<String, Object> requestParams){
+//        String openid = (String) requestParams.get("openid");
+//        Integer point = (Integer) requestParams.get("point");
+//        String groupidStr = (String) requestParams.get("groupid");
+//        Integer groupid = Integer.valueOf(groupidStr);
+//        TbGroupPointFlow tbGroupPointFlow = new TbGroupPointFlow();
+//        Map<String,Object> groupMap = new HashMap<>();
+//        groupMap.put("groupid",groupid);
+//        List<TbGroup> tbGroupList = tbGroupService.listByMap(groupMap);
+//        TbGroup group = tbGroupList.isEmpty()? null : tbGroupList.get(0);
+//        assert group != null;
+//        Integer grouppoint = group.getGroupPoint();
+//        Map<String,Object> userMap = new HashMap<>();
+//        userMap.put("openid",openid);
+//        List<TbUser> tbUserList=tbUserService.listByMap(userMap);
+//        TbUser user = tbUserList.isEmpty()? null : tbUserList.get(0);
+//        assert user != null;
+//        Integer userpoint = user.getPointbalance();
+//        TbPointtransactionrecords pointreduce = new TbPointtransactionrecords();
+//        if (userpoint < point) {
+//            return pointNotEnough();
+//        } else {
+//            Integer userid = user.getId();
+//            user.setPointbalance(userpoint - point);
+//            pointreduce.setUserid(userid);
+//            pointreduce.setIncomeOrExpenseType(-1);
+//            pointreduce.setPointValue(point);
+//            pointreduce.setUserName(user.getName());
+//            group.setGroupPoint(grouppoint + point);
+//            tbGroupPointFlow.setGroupid(groupid);
+//            tbGroupPointFlow.setIncomeOrExpenseType(1);
+//            tbGroupPointFlow.setGroupName(group.getGroupName());
+//            tbGroupPointFlow.setPointValue(point);
+//            tbGroupPointFlow.setOpenid(openid);
+//            tbGroupPointFlow.setUsername(user.getName());
+//            if (tbUserService.updateById(user) && tbPointtransactionrecordsService.save(pointreduce)&&tbGroupService.updateById(group)&&tbGroupPointFlowService.save(tbGroupPointFlow)) {
+//                return success("积分已转至群组");
+//            } else {
+//                return fail("积分转群组失败");
+//            }
+//        }
+//    }
 }

@@ -3,8 +3,8 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: 12345678
-    url: jdbc:postgresql://localhost:5432/waterstation
-#    url: jdbc:postgresql://172.31.151.129:54320/waterstation
+#    url: jdbc:postgresql://localhost:5432/waterstation
+    url: jdbc:postgresql://172.31.151.129:54320/waterstation
     tomcat:
       max-active: 2048
       min-idle: 512
@@ -30,6 +30,14 @@ server:
     key-store: classpath:waterstation.hexishuzi.com.jks
     key-store-password: rilaesrj
     key-store-type: JKS
+
+    # 微信支付配置 notifyUrl：微信支付异步回调地址
+pay:
+  appId: wx715a08a8d60a8595 #应用id
+  apiKey: gwxkjvfewvfabvcrxgrawvgs924ceaxj #商户私钥key
+  mchId: 1677661558 #商户id
+  appSecret: 24f03b851b81a1225c43f17535886eb9 #小程序密钥
+  notifyUrl: /weixin/callback #支付回调地址
 #wxpay:
 #  mch:
 #    mchid:'商家id'

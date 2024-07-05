@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.waterstation.waterstation.entity.TbAdmin">
-        <id column="id" property="adminId" />
+        <id column="id" property="id" />
         <result column="admin_name" property="adminName" />
         <result column="phone_number" property="phoneNumber" />
         <result column="gender" property="gender" />

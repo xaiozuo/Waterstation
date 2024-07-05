@@ -51,20 +51,20 @@ public class TbIcCardController {
     /**
      * 积分转换为ic卡余额
      */
-    @PostMapping("/rechargeByPoint")
-    public String rechargeByPoint(@RequestBody Map<String, Object> requestParams){
-        String appid = (String) requestParams.get("appid");
-        String saler = (String) requestParams.get("saler");
-        String  icid= (String) requestParams.get("icid");
-        String value = (String) requestParams.get("value");
-        String income = (String) requestParams.get("income");
-        String password = (String) requestParams.get("password");
-        String trad_id = (String) requestParams.get("trad_id");
-        String url = "api.happy-ti.com:2028/device/getdetail?appid="+appid+"&user="+saler+"&card="+icid+"&value="+value+"&income="+income+"&password="+password+"&trad_id="+trad_id;
-        String response = HttpUtil.get(url);
-        JSONObject responseObject = new JSONObject(response);
-        return responseObject.toString();
-    }
+//    @PostMapping("/rechargeByPoint")
+//    public String rechargeByPoint(@RequestBody Map<String, Object> requestParams){
+//        String appid = (String) requestParams.get("appid");
+//        String saler = (String) requestParams.get("saler");
+//        String  icid= (String) requestParams.get("icid");
+//        String value = (String) requestParams.get("value");
+//        String income = (String) requestParams.get("income");
+//        String password = (String) requestParams.get("password");
+//        String trad_id = (String) requestParams.get("trad_id");
+//        String url = "api.happy-ti.com:2028/device/getdetail?appid="+appid+"&user="+saler+"&card="+icid+"&value="+value+"&income="+income+"&password="+password+"&trad_id="+trad_id;
+//        String response = HttpUtil.get(url);
+//        JSONObject responseObject = new JSONObject(response);
+//        return responseObject.toString();
+//    }
     /**
      * 零钱换ic卡余额（弃用）
      */

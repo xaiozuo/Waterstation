@@ -2,14 +2,19 @@ package com.waterstation.waterstation.controller;
 
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
+import com.waterstation.waterstation.service.TbPointrulesService;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+
 
 @RestController
 @Controller
 @RequestMapping("/get")
 public class getOpenIdController {
+    @Resource
+    private TbPointrulesService tbPointrulesService;
     private static Integer isCodeZero;
     @PostMapping("/openid")
     public Map<String, String> getOpenid(@RequestBody Map<String, Object> requestParams) {
@@ -113,7 +118,7 @@ public class getOpenIdController {
         String appid = (String) requestParams.get("appId");
         String saler = (String) requestParams.get("saler");
         String deviceId = (String) requestParams.get("id");
-        Integer value = (Integer) requestParams.get("value");
+        String value = (String) requestParams.get("value");
         String userid = (String) requestParams.get("userid");
         String ch = (String) requestParams.get("ch");
         String location = (String) requestParams.get("location");
@@ -187,30 +192,47 @@ public class getOpenIdController {
     }
     @PostMapping("/cardinfo")
     public Map<String, String> getcardinfo(@RequestBody Map<String, Object> requestParams) {
+//    public String getcardinfo(@RequestBody Map<String, Object> requestParams) {
         String appid = (String) requestParams.get("appid");
-        String user = (String) requestParams.get("openid");
-        String card = (String) requestParams.get("icid");
+        String user = (String) requestParams.get("user");
+        String card = (String) requestParams.get("card");
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("appid", appid);
-        paramMap.put("user)", user);
+        paramMap.put("user", user);
         paramMap.put("card", card);
         String result= HttpUtil.get("api.happy-ti.com:2028/cardinfo", paramMap);
-        String value = extractOpenId(result,"value");
-        Map<String, String> valueMap = new HashMap<>();
-        valueMap.put("value", value);
-        return valueMap;
+        String error = extractError(result,"error");
+        Map<String, String> Map = new HashMap<>();
+        if(Objects.equals(error, "0")){
+            String value = extractOpenId(result,"value");
+            Map.put("value", value);
+        }else{
+            Map.put("error", error);
+        }
+        return Map;
+//        return result;
     }
     @PostMapping("/addvalue")
     public String addvalue(@RequestBody Map<String, Object> requestParams) {
         String appid = (String) requestParams.get("appid");
-        String user = (String) requestParams.get("openid");
-        String card = (String) requestParams.get("icid");
+        String user = (String) requestParams.get("user");
+        String card = (String) requestParams.get("card");
         String value = (String) requestParams.get("value");
         String income = (String) requestParams.get("income");
         String password = (String) requestParams.get("password");
         String trad_id = (String) requestParams.get("trad_id");
-        String url = "api.happy-ti.com:2028/addvalue?appid=" + appid +"&user=" + user + "&card=" + card + "&value=" + value + "&income=" + income + "&password=" + password + "&trad_id=" + trad_id;
-        return HttpUtil.get(url);
+        HashMap<String, Object> paramMap = new HashMap<>();
+        paramMap.put("appid", appid);
+        paramMap.put("user", user);
+        paramMap.put("card", card);
+        paramMap.put("value",value);
+        paramMap.put("income",income);
+        paramMap.put("password",password);
+        paramMap.put("trad_id",trad_id);
+        String url = "api.happy-ti.com:2028/addvalue";
+        String result = HttpUtil.post(url,paramMap);
+        System.out.println(result);
+        return result;
     }
     public static Integer callAPI(String appid,String saler,String deviceId,String salerOrderId) {
         // 调用你自己的接口
@@ -218,6 +240,14 @@ public class getOpenIdController {
         String result = HttpUtil.get(url2);
         return Integer.valueOf(Objects.requireNonNull(extractOpenId(result, "code")));
 
+    }
+    public static String extractError(String json,String key) {
+        JSONObject jsonObject = new JSONObject(json);
+        Map<String, Object> data = jsonObject;
+        if (data.containsKey(key)) {
+            return data.get(key).toString();
+        }
+        return null;
     }
     public static String extractOpenId(String json,String key) {
         Map<String, Object> data = parseJSON(json);

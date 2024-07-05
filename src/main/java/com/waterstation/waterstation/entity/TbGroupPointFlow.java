@@ -6,6 +6,9 @@ import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
+/**
+ * @author Administrator
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="TbGroupPointFlow对象", description="")
